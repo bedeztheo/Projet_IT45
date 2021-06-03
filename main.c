@@ -274,7 +274,11 @@ int formation[NBR_FORMATION][6]={
    {79,SPECIALITE_MENUISERIE,COMPETENCE_SIGNES,SAMEDI,8,10}
 };
 
+int nombreHeureFormation(int idFormation){
 
+    return formation[idFormation][5] - formation[idFormation][4];
+
+}
 
 
 void initialiserPopulation(){
@@ -331,7 +335,7 @@ void initialiserPopulation(){
     }
 
     for(i = 0; i < NB_INTERFACES; i++)
-        printf("Interface n %d -> id n %d\n", i, population[i].idIndividu);
+        printf("Interface n %d -> id n %d. Competences signes = %d, competences LPC = %d\n", i, population[i].idIndividu, competences_interfaces[population[i].idIndividu][0], competences_interfaces[population[i].idIndividu][1]);
 
     for(i = 0; i < NBR_FORMATIONS; i++){         //remplissage aléatoire des formations
 
@@ -341,7 +345,15 @@ void initialiserPopulation(){
 
         while(formationPlacee != 1){       //Tant que toutes les formations ne sont pas placées
 
-            if(i < nbInterfacesSignesLPC){
+            if(formation[2][i] == COMPETENCE_SIGNES){
+
+                while(formationPlacee != 1){
+
+
+
+
+
+                }
 
             }else if(i < nbInterfacesUniquementSignes){
 
@@ -360,8 +372,11 @@ void initialiserPopulation(){
 int main()
 {
 
+    //printf("nbr heure forma n 10 = %d", nombreHeureFormation(10));
+
 
     initialiserPopulation();
+
 
 }
 
