@@ -280,6 +280,34 @@ int nombreHeureFormation(int idFormation){
 
 }
 
+void croiser2Individus(int id1, int id2, int typeCroisement){
+
+    /**
+     *  typeCroisement peut prendre 3 valeurs:
+     *
+     *  0 si le croisement se déroule entre 2 interfaces ayant les mêmes cométences
+     *  1 si le croisement se déroule entre une interface mixte et une interface signes
+     *  2 si le croisement se déroule entre une interface mixte et une interface codage LPC
+     **/
+
+
+
+    /*int i, valAlea;
+
+    for(i = 0; i < 80; i){
+
+        valAlea = rand()2;
+
+        if(valAlea == 1){
+
+
+
+        }
+
+
+    }*/
+
+}
 
 void initialiserPopulation(){
 
@@ -290,7 +318,7 @@ void initialiserPopulation(){
     int nbHeures, edtRempli;
 
 
-    for(i = 0; i < NB_INTERFACES; i++){         // comptage ccompétences interfaces
+    for(i = 0; i < NB_INTERFACES; i++){         // comptage compétences interfaces    commun à tous les individus
 
         if(competences_interfaces[i][0] == 1 && competences_interfaces[i][1] == 1 ){    //Interface codant et LPC et Signes
             nbInterfacesSignesLPC++;
@@ -300,42 +328,39 @@ void initialiserPopulation(){
             nbInterfacesUniquementLPC++;
         }
 
-        for(j = 0; j < 12; j++){
-            population->idFormations[j] = NULL;
-        }
-
-
     }
 
-    for(i = 0; i < NB_INTERFACES; i++){         //Tri dans la population des interfaces selon leurs compétences;
+    for(i = 0; i < NB_INTERFACES; i++){         //Tri dans la population des interfaces selon leurs compétences        commun a tous les individus
 
         if(competences_interfaces[i][0] == 1 && competences_interfaces[i][1] == 1 ){    //Interface codant et LPC et Signes
 
-            population[nbInterSignesLPC_Placees].idIndividu = i;
+            population[0].idIndividu[nbInterSignesLPC_Placees] = i;
             nbInterSignesLPC_Placees++;
 
         }else if(competences_interfaces[i][0] == 1){
 
-            population[nbInterSignesPlacees + nbInterfacesSignesLPC].idIndividu = i;
+            population[0].idIndividu[nbInterSignesPlacees + nbInterfacesSignesLPC] = i;
             nbInterSignesPlacees++;
 
         }else{
 
-            population[nbInterLPCPlacees + nbInterfacesSignesLPC + nbInterfacesUniquementSignes].idIndividu = i;
+            population[0].idIndividu[nbInterLPCPlacees + nbInterfacesSignesLPC + nbInterfacesUniquementSignes] = i;
             nbInterLPCPlacees++;
 
         }
 
-        for(j = 0; j < 12; j++){
-            population[i].idFormations[j] = NULL;
-        }
+        population[0].nbHeuresSemaine[i] = 0;
 
-        population[i].nbHeuresSemaine = 0;
+    }
+
+    for(i = 0; i < 1920; i++){
+
+        population[0].listeBits[i] = 0;
 
     }
 
     for(i = 0; i < NB_INTERFACES; i++)
-        printf("Interface n %d -> id n %d. Competences signes = %d, competences LPC = %d\n", i, population[i].idIndividu, competences_interfaces[population[i].idIndividu][0], competences_interfaces[population[i].idIndividu][1]);
+        printf("Interface n %d -> id n %d. Competences signes = %d, competences LPC = %d\n", i, population[0].idIndividu[i], competences_interfaces[population[0].idIndividu[i]][0], competences_interfaces[population[0].idIndividu[i]][1]);
 
     for(i = 0; i < NBR_FORMATIONS; i++){         //remplissage aléatoire des formations
 
@@ -343,29 +368,69 @@ void initialiserPopulation(){
         int formationPlacee = 0;
         int j = 0;
 
-        while(formationPlacee != 1){       //Tant que toutes les formations ne sont pas placées
+        //while(formationPlacee != 1){       //Tant que toutes les formations ne sont pas placées
 
             if(formation[2][i] == COMPETENCE_SIGNES){
 
                 while(formationPlacee != 1){
 
+                    if(population[0].nbHeuresSemaine[j] + nombreHeureFormation(i) <= 35 && j < nbInterfacesSignesLPC + nbInterfacesUniquementSignes){
 
+                        population[0].listeBits[j * 80 + i] = 1;
+                        population[0].nbHeuresSemaine[j] = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
+                        formationPlacee = 1;
 
-
+                    }else{
+                        j++;
+                    }
 
                 }
 
-            }else if(i < nbInterfacesUniquementSignes){
-
             }else{
+
+                while(formationPlacee != 1){
+
+                    if(population[0].nbHeuresSemaine[j] + nombreHeureFormation(i) <= 35 && j < 24){
+
+                        population[0].listeBits[j * 80 + i] = 1;
+                        population[0].nbHeuresSemaine[j] = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
+                        formationPlacee = 1;
+
+                    }else{
+
+                        if(j == nbInterfacesSignesLPC - 1){
+                            j == j + nbInterfacesUniquementSignes + 1;
+                        }
+
+                        j++;
+
+                    }
+
+                }
 
             }
             //population[i]->idFormations[j] = idFormationAPlacer;
-        }
+
 
     }
 
     printf("Nombre LPC : %d, nb Signes : %d, poly signes : %d \n", nbInterfacesUniquementLPC, nbInterfacesUniquementSignes, nbInterfacesSignesLPC);
+
+    int compteur = 0;
+
+    for(i = 0; i < 1920; i++){
+
+        if(population[0].listeBits[i] == 1)
+            compteur++;
+
+        printf(" %d", population[0].listeBits[i]);
+
+    }
+
+    printf("\ncompteur = %d\n", compteur);
+
+    for(i = 0; i < 24; i++)
+        printf("nb heure semaine int %d: %d\n", i, population[0].nbHeuresSemaine[i]);
 
 }
 
