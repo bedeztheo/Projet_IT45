@@ -3,9 +3,9 @@
 
 typedef struct {
 
-    int idIndividu;
-    int idFormations[12];
-    int nbHeuresSemaine;
+    int idIndividu[24];
+    int listeBits[80 * 24];
+    int nbHeuresSemaine[24];
 
 } individu;
 
