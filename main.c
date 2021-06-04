@@ -393,7 +393,12 @@ float calculerDistanceXY(int X1, int X2, int Y1, int Y2){
 
 int calculerTotalDistances(int idIndividu){
 
-    int i;
+    int i, distanceTotale = 0;
+
+    for(i = 0; i < NBR_INTERFACES; i++){
+        distanceTotale = distanceTotale + calculerDistanceTotaleInterface(i);
+    }
+    return distanceTotale;
 
 }
 
@@ -652,9 +657,9 @@ int main()
 
     printf("Nb penalites = %d\n", compterPenalites(0));
 
-    printf("distance totale interface %d = %d", 0, calculerDistanceTotaleInterface(0));
+    printf("distance totale interface %d = %d\n", 0, calculerDistanceTotaleInterface(0));
 
-    //printf("\n%d", formationCompatible(0, 5));
+    printf("distance totale = %d\n", calculerTotalDistances(0));
 
 }
 
