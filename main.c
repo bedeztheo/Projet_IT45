@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #include "instance-80formations.h"
 #include "structures.h"
 
 #define NB_INTERFACES 24
 #define MAX_HEURES 35
-#define NBR_HEURES_INT_INIT 15
+#define NBR_HEURES_INT_INIT 28
 
 individu population[NB_INTERFACES];
 
@@ -381,7 +382,13 @@ int formationCompatible(int idInterface, int idFormation){
 
 float evaluerIndividu(int idIndividu){
 
+    int evaluation, fCorr, nbPenalites;
 
+    fCorr = calculerDistanceTotaleInterface(idIndividu) / NBR_FORMATIONS;
+
+    nbPenalites = compterPenalites(idIndividu);
+
+    return evaluation = 0.5 * (calculerTotalDistances(idIndividu) / NBR_INTERFACES + ecartTypeIndividu(idIndividu)) + 0.5 * fCorr * nbPenalites;
 
 }
 
@@ -449,6 +456,26 @@ int calculerDistanceTotaleInterface(int idInterface){
 
 }
 
+int ecartTypeIndividu(int individu){
+
+    int i, moyenne, resultat = 0;
+
+    moyenne = calculerTotalDistances(0) / NBR_INTERFACES;
+
+    for(i = 0; i < NBR_INTERFACES; i++){
+
+        resultat = pow(moyenne - calculerDistanceTotaleInterface(i), 2);
+
+    }
+
+    resultat = resultat / NBR_INTERFACES;
+
+    resultat = sqrt(resultat);
+
+    return resultat;
+
+}
+
 int compterPenalites(int idIndividu){
 
     int i, j, specialiteFormation, penalites = 0;
@@ -482,7 +509,7 @@ void croiser2Interfaces(int id1, int id2){
     //afficherInterface(id1);
     //afficherInterface(id2);
 
-    int i, valAlea, tempoListeBits, typeFormation, tempoHeuresInterface1, tempoHeuresInterface2;
+    int i, valAlea, tempoListeBits, typeFormation, tempoHeuresInterface1, tempoHeuresInterface2, competencesId1, competencesId2;
 
     for(i = 0; i < 80; i++){
 
@@ -507,7 +534,13 @@ void croiser2Interfaces(int id1, int id2){
 
         }
 
-        if(valAlea == 1 && competences_interfaces[population[0].idIndividu[id1]][typeFormation] == competences_interfaces[population[0].idIndividu[id2]][typeFormation] \
+        competencesId1 = competences_interfaces[population[0].idIndividu[id1]][typeFormation];
+        competencesId2 = competences_interfaces[population[0].idIndividu[id2]][typeFormation];
+
+        //if(valAlea == 1 && competencesId1 == competencesId2 && formationCompatible(id1, i) == 1 && formationCompatible(id2, i) == 1 \
+        //   && tempoHeuresInterface1 <= 35 && tempoHeuresInterface2 <= 35){
+
+        if(valAlea == 1 && competencesId1 == competencesId2 \
            && tempoHeuresInterface1 <= 35 && tempoHeuresInterface2 <= 35){
 
             tempoListeBits = population[0].listeBits[id1 * 80 + i];
@@ -660,6 +693,18 @@ int main()
     printf("distance totale interface %d = %d\n", 0, calculerDistanceTotaleInterface(0));
 
     printf("distance totale = %d\n", calculerTotalDistances(0));
+
+    printf("Evaluation individu 0 = %f", evaluerIndividu(0));
+
+    for(i = 0; i < 11; i++)
+        croiser2Interfaces(2 * i, 2 * i + 1);
+
+    printf("Evaluation individu 0 = %f", evaluerIndividu(0));
+
+    for(i = 0; i < 11; i++)
+        croiser2Interfaces(2 * i, 2 * i + 1);
+
+    printf("Evaluation individu 0 = %f", evaluerIndividu(0));
 
 }
 
