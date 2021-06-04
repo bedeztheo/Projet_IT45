@@ -2,32 +2,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-
-#include "instance-80formations.h"
 #include "structures.h"
-
-#define NB_INTERFACES 24
-#define MAX_HEURES 35
-#define NBR_HEURES_INT_INIT 28
-
-individu population[NB_INTERFACES];
-
-
-#define NBR_INTERFACES        24
-#define NBR_APPRENANTS        80
-#define NBR_FORMATIONS        80
-#define NBR_CENTRES_FORMATION 5
-#define NBR_SPECIALITES       5
-#define NBR_NODES 	      NBR_CENTRES_FORMATION+NBR_INTERFACES+NBR_APPRENANTS
-
-/* code des compétence en langage des signes et en codage LPC */
-#define COMPETENCE_SIGNES     0
-#define COMPETENCE_CODAGE     1
+#include "data.h"
 
 /* competences des interfaces en SIGNES et CODAGE*/
 int competences_interfaces[NBR_INTERFACES][2]={
-    {1,0}, /* compétence en langages des SIGNES mais pas en CODAGE LPC */
-    {0,1}, /* pas de compétence en langages des SIGNES mais compétence en CODAGE LPC */
+    {1,0}, /* compï¿½tence en langages des SIGNES mais pas en CODAGE LPC */
+    {0,1}, /* pas de compï¿½tence en langages des SIGNES mais compï¿½tence en CODAGE LPC */
     {1,0},
     {1,0},
     {1,0},
@@ -51,14 +32,6 @@ int competences_interfaces[NBR_INTERFACES][2]={
     {0,1},
     {1,0}
 };
-
-/* spécialités des interfaces */
-#define SPECIALITE_SANS       -1 /* Enseigné dans le centre le plus proche */
-#define SPECIALITE_MENUISERIE 0
-#define SPECIALITE_ELECTRICITE 1
-#define SPECIALITE_MECANIQUE 2
-#define SPECIALITE_INFORMATIQUE 3
-#define SPECIALITE_CUISINE 4
 
 /* specialite des interfaces */
 int specialite_interfaces[NBR_INTERFACES][NBR_SPECIALITES]={
@@ -88,10 +61,10 @@ int specialite_interfaces[NBR_INTERFACES][NBR_SPECIALITES]={
     {1,0,0,1,0}
 };
 
-/* coordonnées des centres de formation, des interfaces et des apprenants */
+/* coordonnï¿½es des centres de formation, des interfaces et des apprenants */
 float coord[NBR_NODES][2]={
 
-    /* Les interfaces se rendent du centre SESSAD à l'école de formation */
+    /* Les interfaces se rendent du centre SESSAD ï¿½ l'ï¿½cole de formation */
     {57,94}, /* centre 0 */
 
     /* Centres de formation */
@@ -184,15 +157,6 @@ float coord[NBR_NODES][2]={
     {153,28}/* apprenant 79 */
 };
 
-#define NBR_FORMATION          80
-
-#define LUNDI                  1
-#define MARDI                  2
-#define MERCREDI               3
-#define JEUDI                  4
-#define VENDREDI               5
-#define SAMEDI                 6
-
 /* formation : id formation, specialite ou centre de formation, competence, jour, horaire debut formation, horaire fin formation */
 int formation[NBR_FORMATION][6]={
    {0,SPECIALITE_MECANIQUE,COMPETENCE_SIGNES,MERCREDI,16,18},
@@ -277,6 +241,8 @@ int formation[NBR_FORMATION][6]={
    {79,SPECIALITE_MENUISERIE,COMPETENCE_SIGNES,SAMEDI,8,10}
 };
 
+Individu population[NBR_INTERFACES];
+
 int nombreHeureFormation(int idFormation){
 
     return formation[idFormation][5] - formation[idFormation][4];
@@ -300,7 +266,7 @@ void afficherIndividu(int idIndividu){
 
     int i;
 
-    printf("Individu ou solution n°%d\n", idIndividu);
+    printf("Individu ou solution nï¿½%d\n", idIndividu);
 
     for(i = 0; i < 24; i++)
         afficherInterface(i);
@@ -570,7 +536,7 @@ void initialiserPopulation(){
     int compteur = 0;
 
 
-    for(i = 0; i < NB_INTERFACES; i++){         // comptage compétences interfaces    commun à tous les individus
+    for(i = 0; i < NB_INTERFACES; i++){         // comptage compï¿½tences interfaces    commun ï¿½ tous les individus
 
         if(competences_interfaces[i][0] == 1 && competences_interfaces[i][1] == 1 ){    //Interface codant et LPC et Signes
             nbInterfacesSignesLPC++;
@@ -582,7 +548,7 @@ void initialiserPopulation(){
 
     }
 
-    for(i = 0; i < NB_INTERFACES; i++){         //Tri dans la population des interfaces selon leurs compétences        commun a tous les individus
+    for(i = 0; i < NB_INTERFACES; i++){         //Tri dans la population des interfaces selon leurs compï¿½tences        commun a tous les individus
 
         if(competences_interfaces[i][0] == 1 && competences_interfaces[i][1] == 1 ){    //Interface codant et LPC et Signes
 
@@ -614,13 +580,13 @@ void initialiserPopulation(){
     for(i = 0; i < NB_INTERFACES; i++)
         printf("Interface n %d -> id n %d. Competences signes = %d, competences LPC = %d\n", i, population[0].idIndividu[i], competences_interfaces[population[0].idIndividu[i]][0], competences_interfaces[population[0].idIndividu[i]][1]);
 
-    for(i = 0; i < NBR_FORMATIONS; i++){         //remplissage aléatoire des formations
+    for(i = 0; i < NBR_FORMATIONS; i++){         //remplissage alï¿½atoire des formations
 
         int nbHeuresAvecFormation = 0, competencesIntPourFormation;
         int formationPlacee = 0;
         int j = 0;
 
-        while(formationPlacee != 1){        //Tant que la formation n'est pas placée
+        while(formationPlacee != 1){        //Tant que la formation n'est pas placï¿½e
 
             nbHeuresAvecFormation = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
             competencesIntPourFormation = competences_interfaces[population[0].idIndividu[j]][formation[i][2]];
@@ -665,7 +631,7 @@ void initialiserPopulation(){
 int main()
 {
 
-    int i;
+    // Fait plutot ca : Population P1 = (Population)malloc(sizeof(Individu)*NbrIndividuPopulationBase); plutot qu'une variable global
 
     srand( time( NULL ) );
 
@@ -696,12 +662,12 @@ int main()
 
     printf("Evaluation individu 0 = %f", evaluerIndividu(0));
 
-    for(i = 0; i < 11; i++)
+    for(int i = 0; i < 11; i++)
         croiser2Interfaces(2 * i, 2 * i + 1);
 
     printf("Evaluation individu 0 = %f", evaluerIndividu(0));
 
-    for(i = 0; i < 11; i++)
+    for(int i = 0; i < 11; i++)
         croiser2Interfaces(2 * i, 2 * i + 1);
 
     printf("Evaluation individu 0 = %f", evaluerIndividu(0));
