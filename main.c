@@ -7,6 +7,7 @@
 
 #define NB_INTERFACES 24
 #define MAX_HEURES 35
+#define NBR_HEURES_INT_INIT 15
 
 individu population[NB_INTERFACES];
 
@@ -191,7 +192,7 @@ float coord[NBR_NODES][2]={
 #define VENDREDI               5
 #define SAMEDI                 6
 
-/* formation : id formation, specialite ou centre de formation, competence, horaire debut formation, horaire fin formation */
+/* formation : id formation, specialite ou centre de formation, competence, jour, horaire debut formation, horaire fin formation */
 int formation[NBR_FORMATION][6]={
    {0,SPECIALITE_MECANIQUE,COMPETENCE_SIGNES,MERCREDI,16,18},
    {1,SPECIALITE_INFORMATIQUE,COMPETENCE_SIGNES,MARDI,13,19},
@@ -305,12 +306,178 @@ void afficherIndividu(int idIndividu){
 
 }
 
+void afficherNbHeuresInterfaces(){
+
+    int i;
+
+    for(i = 0; i < 24; i++)
+        printf("nb heure semaine int %d: %d\n", i, population[0].nbHeuresSemaine[i]);
+
+}
+
+void afficherEDTInterface(int idInterface){
+
+    int i;
+
+    printf("Emploi du temps de l'interface %d\n", idInterface);
+
+    for(i = 0; i < 80; i++){
+
+        if(population[0].listeBits[idInterface * 80 + i] == 1){
+
+            switch(formation[i][3]){
+
+                case 1 : printf("LUNDI \t\t");
+                    break;
+
+                case 2 : printf("MARDI \t\t");
+                    break;
+
+                case 3 : printf("MERCREDI \t");
+                    break;
+
+                case 4 : printf("JEUDI \t\t");
+                    break;
+
+                case 5 : printf("VENDREDI \t");
+                    break;
+
+                case 6 : printf("SAMEDI \t\t");
+                    break;
+
+            }
+
+            printf("%d\t%d\tformation num %d\n", formation[i][4], formation[i][5], i);
+
+        }
+
+    }
+
+}
+
+int formationCompatible(int idInterface, int idFormation){
+
+    /**
+     *  @brief Fonction qui renvoie 1 si la formation est compatible avec l'emploi du temps de l'interface
+    **/
+
+    int i, jourFormation = formation[idFormation][3], hDebutFormation = formation[idFormation][4], hFinFormation = formation[idFormation][5];
+
+    for(i = 0; i < 80; i++){
+
+        if(population[0].listeBits[idInterface * 80 + i] == 1 && formation[i][3] == jourFormation){
+
+            if((formation[i][4] >= hDebutFormation && formation[i][4] < hFinFormation) || (formation[i][5] > hDebutFormation && formation[i][5] <= hFinFormation)){
+                return 0;
+            }
+
+        }
+
+    }
+
+    return 1;
+
+}
+
+float evaluerIndividu(int idIndividu){
+
+
+
+}
+
+float calculerDistanceXY(int X1, int X2, int Y1, int Y2){
+
+    return sqrt(pow(X2 - X1, 2) + pow(Y2 - Y1, 2));
+
+}
+
+int calculerTotalDistances(int idIndividu){
+
+    int i;
+
+}
+
+int calculerDistanceTotaleInterface(int idInterface){
+
+    int i, j, endroit1 = -1, endroit2 = -1;
+
+    int distanceTotale = 0;
+
+    int idCentresParHeures[14];
+
+    idCentresParHeures[0] = 0;
+    idCentresParHeures[13] = 0;
+
+    for(i = 0; i < 7; i++){
+
+        for(j = 1; j < 13; j++)
+            idCentresParHeures[j] = -1;
+
+        for(j = 0; j < NBR_FORMATIONS; j++){
+
+            if(population[0].listeBits[idInterface * 80 + j] == 1 && formation[j][3] == i){
+
+                idCentresParHeures[formation[j][4] - 7] = formation[j][1] + 1;
+
+            }
+        }
+
+        endroit1 = idCentresParHeures[0];
+
+        for(j = 1; j < 14; j++){
+
+            if(idCentresParHeures[j] != -1){
+
+                endroit2 = idCentresParHeures[j];
+
+                distanceTotale = distanceTotale + calculerDistanceXY(coord[endroit1][0], coord[endroit2][0], coord[endroit1][1], coord[endroit2][1]);
+
+                endroit1 = endroit2;
+
+            }
+
+        }
+
+    }
+
+    return distanceTotale;
+
+}
+
+int compterPenalites(int idIndividu){
+
+    int i, j, specialiteFormation, penalites = 0;
+
+    for(i = 0; i < NBR_FORMATIONS; i++){
+
+        specialiteFormation = formation[i][1];
+        j = 0;
+
+        while(j < NBR_INTERFACES){
+
+            if(population[0].listeBits[j * 80 + i] == 1 && specialite_interfaces[population[0].idIndividu[j]][specialiteFormation] == 0){
+
+                penalites++;
+                j = NBR_INTERFACES;
+
+            }
+
+            j++;
+
+        }
+
+    }
+
+    return penalites;
+
+}
+
 void croiser2Interfaces(int id1, int id2){
 
     //afficherInterface(id1);
     //afficherInterface(id2);
 
-    int i, valAlea, tempoListeBits, typeFormation;
+    int i, valAlea, tempoListeBits, typeFormation, tempoHeuresInterface1, tempoHeuresInterface2;
 
     for(i = 0; i < 80; i++){
 
@@ -318,13 +485,32 @@ void croiser2Interfaces(int id1, int id2){
 
         typeFormation = formation[i][2];
 
-        //printf("%d\n", valAlea);
+        if(population[0].listeBits[id1 * 80 + i] == population[0].listeBits[id2 * 80 + i]){
 
-        if(valAlea == 1 && competences_interfaces[population[0].idIndividu[id1]][typeFormation] == competences_interfaces[population[0].idIndividu[id2]][typeFormation]){
+            tempoHeuresInterface1 = population[0].nbHeuresSemaine[id1];
+            tempoHeuresInterface2 = population[0].nbHeuresSemaine[id2];
+
+        }else if(population[0].listeBits[id1 * 80 + i] == 1){
+
+            tempoHeuresInterface1 = population[0].nbHeuresSemaine[id1] - nombreHeureFormation(i);
+            tempoHeuresInterface2 = population[0].nbHeuresSemaine[id2] + nombreHeureFormation(i);
+
+        }else{
+
+            tempoHeuresInterface1 = population[0].nbHeuresSemaine[id1] + nombreHeureFormation(i);
+            tempoHeuresInterface2 = population[0].nbHeuresSemaine[id2] - nombreHeureFormation(i);
+
+        }
+
+        if(valAlea == 1 && competences_interfaces[population[0].idIndividu[id1]][typeFormation] == competences_interfaces[population[0].idIndividu[id2]][typeFormation] \
+           && tempoHeuresInterface1 <= 35 && tempoHeuresInterface2 <= 35){
 
             tempoListeBits = population[0].listeBits[id1 * 80 + i];
             population[0].listeBits[id1 * 80 + i] = population[0].listeBits[id2 * 80 + i];
             population[0].listeBits[id2 * 80 + i] = tempoListeBits;
+
+            population[0].nbHeuresSemaine[id1] = tempoHeuresInterface1;
+            population[0].nbHeuresSemaine[id2] = tempoHeuresInterface2;
 
         }
 
@@ -392,89 +578,35 @@ void initialiserPopulation(){
 
     for(i = 0; i < NBR_FORMATIONS; i++){         //remplissage aléatoire des formations
 
-        int nbHeures = 0;
+        int nbHeuresAvecFormation = 0, competencesIntPourFormation;
         int formationPlacee = 0;
         int j = 0;
 
-        //while(formationPlacee != 1){       //Tant que toutes les formations ne sont pas placées
+        while(formationPlacee != 1){        //Tant que la formation n'est pas placée
 
-        //if(formation[i][2] == 0){
+            nbHeuresAvecFormation = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
+            competencesIntPourFormation = competences_interfaces[population[0].idIndividu[j]][formation[i][2]];
 
-           // printf("formation signes n %d", i);
+            if(nbHeuresAvecFormation <= NBR_HEURES_INT_INIT && competencesIntPourFormation == 1 && formationCompatible(j, i) == 1){
 
-            while(formationPlacee != 1){
+                population[0].listeBits[j * 80 + i] = 1;
+                population[0].nbHeuresSemaine[j] = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
+                formationPlacee = 1;
 
-                if(population[0].nbHeuresSemaine[j] + nombreHeureFormation(i) <= 35 && competences_interfaces[population[0].idIndividu[j]][formation[i][2]] == 1){
-
-                    population[0].listeBits[j * 80 + i] = 1;
-                    population[0].nbHeuresSemaine[j] = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
-                    formationPlacee = 1;
-
-                    //printf(" interface %d\n", j);
-
-                }else{
-                    j++;
-                }
-
-            }
-
-        //}
-            /*if(formation[i][2] == 0){
-
-                printf("formation signes n %d", i);
-
-                while(formationPlacee != 1){
-
-                    if(population[0].nbHeuresSemaine[j] + nombreHeureFormation(i) <= 35 && j < nbInterfacesSignesLPC + nbInterfacesUniquementSignes){
-
-                        population[0].listeBits[j * 80 + i] = 1;
-                        population[0].nbHeuresSemaine[j] = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
-                        formationPlacee = 1;
-
-                        printf(" interface %d\n", j);
-
-                    }else{
-                        j++;
-                    }
-
-                }
+                //printf(" interface %d\n", j);
 
             }else{
+                j++;
+            }
 
-                printf("formation LPC n %d", i);
+        }
 
-                while(formationPlacee != 1){
 
-                    if(population[0].nbHeuresSemaine[j] + nombreHeureFormation(i) <= 35 && j < 24){
-
-                        population[0].listeBits[j * 80 + i] = 1;
-                        population[0].nbHeuresSemaine[j] = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
-                        formationPlacee = 1;
-
-                        printf(" interface %d\n", j);
-
-                        //compteur++;
-
-                    }else{
-
-                        if(j == nbInterfacesSignesLPC - 1){
-                            j == j + nbInterfacesUniquementSignes;
-                            compteur++;
-                        }
-
-                        j++;
-
-                    }
-
-                }
-
-            }*/
-            //population[i]->idFormations[j] = idFormationAPlacer;
 
 
     }
 
-    printf("compteur = %d", compteur);
+    //printf("compteur = %d", compteur);
     printf("Nombre LPC : %d, nb Signes : %d, poly signes : %d \n", nbInterfacesUniquementLPC, nbInterfacesUniquementSignes, nbInterfacesSignesLPC);
 
 
@@ -489,9 +621,6 @@ void initialiserPopulation(){
     }*/
 
     //printf("\ncompteur = %d\n", compteur);
-
-    /*for(i = 0; i < 24; i++)
-        printf("nb heure semaine int %d: %d\n", i, population[0].nbHeuresSemaine[i]);*/
 
 }
 
@@ -508,12 +637,24 @@ int main()
 
     afficherIndividu(0);
 
-    for(i = 0; i < 11; i++)
-        croiser2Interfaces(2 * i, 2 * i + 1);
+    //for(i = 0; i < 11; i++)
+    //    croiser2Interfaces(2 * i, 2 * i + 1);
 
-    printf("\n");
+    //printf("\n");
 
-    afficherIndividu(0);
+    //afficherIndividu(0);
+
+    //afficherNbHeuresInterfaces();
+
+    afficherEDTInterface(0);
+    /*afficherEDTInterface(1);
+    afficherEDTInterface(2);*/
+
+    printf("Nb penalites = %d\n", compterPenalites(0));
+
+    printf("distance totale interface %d = %d", 0, calculerDistanceTotaleInterface(0));
+
+    //printf("\n%d", formationCompatible(0, 5));
 
 }
 
