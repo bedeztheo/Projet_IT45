@@ -2,7 +2,7 @@
 #define DATA_H_INCLUDED
 
 #define MAX_HEURES 35
-#define NBR_HEURES_INT_INIT 28
+#define NBR_HEURES_INT_INIT 18
 
 #define NBR_INTERFACES        24
 #define NBR_APPRENANTS        80
@@ -44,4 +44,4 @@ extern float coord[NBR_NODES][2];
 /* formation : id formation, specialite ou centre de formation, competence, jour, horaire debut formation, horaire fin formation */
 extern int formation[NBR_FORMATION][6];
 
-#endif 
+#endif
