@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include <math.h>
 #include "structures.h"
@@ -262,7 +263,7 @@ void afficherInterface(int idInterface){
 
 void afficherIndividu(int idIndividu){
 
-    printf("Individu ou solution n�%d\n", idIndividu);
+    printf("Individu ou solution n %d\n", idIndividu);
 
     for(int i = 0; i < 24; i++)
         afficherInterface(i);
@@ -608,6 +609,8 @@ int main()
 {
 
     // Fait plutot ca : Population P1 = (Population)malloc(sizeof(Individu)*NbrIndividuPopulationBase); plutot qu'une variable global
+
+    Population P1 = (Population) malloc(sizeof(Individu) * NBR_INDIVIDUS_POP);
 
     srand( time( NULL ) );
 
