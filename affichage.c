@@ -25,6 +25,13 @@ void afficherIndividu(Population population, int idIndividu){
 
 }
 
+void afficherPopulation(Population population){
+
+    for(int i = 0; i < NBR_INDIVIDUS_POP; i++)
+        afficherIndividu(population, i);
+
+}
+
 void afficherNbHeuresInterfaces(Population population, int idIndividu){
 
     for(int i = 0; i < 24; i++)

@@ -4,6 +4,7 @@
 
 #include "data.h"
 #include "structures.h"
+#include "tests_sur_population.h"
 
 void croiser2Interfaces(Population population, int idIndividu, int id1, int id2){
 
@@ -39,8 +40,6 @@ void croiser2Interfaces(Population population, int idIndividu, int id1, int id2)
         competencesId1 = competences_interfaces[population[idIndividu].idIndividu[id1]][typeFormation];
         competencesId2 = competences_interfaces[population[idIndividu].idIndividu[id2]][typeFormation];
 
-        //if(valAlea == 1 && competencesId1 == competencesId2 && formationCompatible(id1, i) == 1 && formationCompatible(id2, i) == 1 \
-        //   && tempoHeuresInterface1 <= 35 && tempoHeuresInterface2 <= 35){
 
         if(valAlea == 1 && competencesId1 == competencesId2 && croisementCompatible == 1\
            && tempoHeuresInterface1 <= 35 && tempoHeuresInterface2 <= 35){
@@ -58,6 +57,42 @@ void croiser2Interfaces(Population population, int idIndividu, int id1, int id2)
 
 }
 
+void croiserIndividu(Population population, int idIndividu){
+
+    int tableauCroisement[NBR_INTERFACES], valAlea, idInt1, idInt2;
+
+    for(int i = 0; i < NBR_INTERFACES; i++){
+
+        tableauCroisement[i] = i;
+
+    }
+
+    for(int i = 0; i < NBR_INTERFACES / 2; i++){
+
+        valAlea = rand()% (NBR_INTERFACES - 2 * i);
+
+        idInt1 = tableauCroisement[valAlea];
+
+        tableauCroisement[valAlea] = tableauCroisement[NBR_INTERFACES - 2 * i - 1];
+
+        valAlea = rand()% (NBR_INTERFACES - 2 * i - 1);
+
+        idInt2 = tableauCroisement[valAlea];
+
+        tableauCroisement[valAlea] = tableauCroisement[NBR_INTERFACES - 2 * i - 2];
+
+        croiser2Interfaces(population, idIndividu, idInt1, idInt2);
+
+    }
+
+}
+
+void croiserPopulation(Population population){
+
+    for(int i = 0; i < NBR_INDIVIDUS_POP; i++)
+        croiserIndividu(population, i);
+
+}
 
 void initialiserPopulation(Population population){
 
@@ -65,9 +100,6 @@ void initialiserPopulation(Population population){
 
     int nbInterfacesUniquementLPC = 0, nbInterfacesUniquementSignes = 0, nbInterfacesSignesLPC = 0;
     int nbInterSignesLPC_Placees, nbInterSignesPlacees, nbInterLPCPlacees;
-    int nbHeures, edtRempli;
-
-    int compteur = 0;
 
 
     for(int i = 0; i < NBR_INTERFACES; i++){         // comptage competences interfaces, commun à tous les individus

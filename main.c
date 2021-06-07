@@ -261,37 +261,35 @@ int main()
 
     //printf("Evaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
 
-    //for(int i = 0; i < 11; i++)
-       // croiser2Interfaces(P1, 0, 2 * i, 2 * i + 1);
 
-    printf("\nouaissss");
 
     //afficherNbHeuresInterfaces(P1, 0);
 
     //afficherEDTInterface(P1, 0, 0);
 
-    //croiser2Interfaces(P1, 0, 0, 18);
 
     //printf("Nb penalites = %d\n", compterPenalites(P1, 0));
 
-   // for(int i = 0; i < 11; i++)
-     //   croiser2Interfaces(P1, 1, 2 * i, 2 * i + 1);
+    croiserPopulation(P1);
+    croiserPopulation(P1);
+    croiserPopulation(P1);
+    croiserPopulation(P1);
+    croiserPopulation(P1);
+    croiserPopulation(P1);
+    croiserPopulation(P1);
+    croiserPopulation(P1);
+    croiserPopulation(P1);
+    croiserPopulation(P1);
 
-    afficherIndividu(P1, 0);
-    afficherIndividu(P1, 1);
-    afficherIndividu(P1, 2);
-    afficherIndividu(P1, 3);
-    afficherIndividu(P1, 4);
 
-    /*for(int i = 0; i < 11; i++)
-        croiser2Interfaces(P1, 0, 2 * i, 2 * i + 1);
+    afficherPopulation(P1);
 
-    printf("Evaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
 
-    for(int i = 0; i < 11; i++)
-        croiser2Interfaces(P1, 0, 2 * i, 2 * i + 1);
-
-    printf("Evaluation individu 0 = %f\n", evaluerIndividu(P1, 0));*/
+    printf("\nEvaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
+    printf("Evaluation individu 1 = %f\n", evaluerIndividu(P1, 1));
+    printf("Evaluation individu 2 = %f\n", evaluerIndividu(P1, 2));
+    printf("Evaluation individu 3 = %f\n", evaluerIndividu(P1, 3));
+    printf("Evaluation individu 4 = %f\n", evaluerIndividu(P1, 4));
 
 
 }
