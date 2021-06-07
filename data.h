@@ -3,6 +3,7 @@
 
 #define MAX_HEURES 35
 #define NBR_HEURES_INT_INIT 18
+#define NBR_INDIVIDUS_POP 5
 
 #define NBR_INTERFACES        24
 #define NBR_APPRENANTS        80

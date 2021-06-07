@@ -3,8 +3,11 @@
 #include <stdint.h>
 #include <time.h>
 #include <math.h>
+
 #include "structures.h"
 #include "data.h"
+#include "affichage.h"
+#include "fonctions_pour_evaluation.h"
 
 /* competences des interfaces en SIGNES et CODAGE*/
 int competences_interfaces[NBR_INTERFACES][2]={
@@ -242,401 +245,43 @@ int formation[NBR_FORMATION][6]={
    {79,SPECIALITE_MENUISERIE,COMPETENCE_SIGNES,SAMEDI,8,10}
 };
 
-//Individu population[NBR_INTERFACES];
 
-int nombreHeureFormation(int idFormation){
 
-    return formation[idFormation][5] - formation[idFormation][4];
-
-}
-
-void afficherInterface(Population population, int idIndividu, int idInterface){
-
-    printf("Interface %d: \t", idInterface);
-
-    for(int i = 0; i < NBR_FORMATIONS; i++)
-        printf("%d", population[idIndividu].listeBits[idInterface * 80 + i]);
-
-    printf("\n");
-
-}
-
-void afficherIndividu(Population population, int idIndividu){
-
-    printf("Individu ou solution n %d\n", idIndividu);
-
-    for(int i = 0; i < 24; i++)
-        afficherInterface(population, idIndividu, i);
-
-}
-
-void afficherNbHeuresInterfaces(Population population, int idIndividu){
-
-    for(int i = 0; i < 24; i++)
-        printf("nb heure semaine int %d: %d\n", i, population[idIndividu].nbHeuresSemaine[i]);
-
-}
-
-void afficherEDTInterface(Population population, int idIndividu, int idInterface){
-
-    printf("Emploi du temps de l'interface %d\n", idInterface);
-
-    for(int i = 0; i < 80; i++){
-
-        if(population[idIndividu].listeBits[idInterface * 80 + i] == 1){
-
-            switch(formation[i][3]){
-
-                case 1 : printf("LUNDI \t\t");
-                    break;
-
-                case 2 : printf("MARDI \t\t");
-                    break;
-
-                case 3 : printf("MERCREDI \t");
-                    break;
-
-                case 4 : printf("JEUDI \t\t");
-                    break;
-
-                case 5 : printf("VENDREDI \t");
-                    break;
-
-                case 6 : printf("SAMEDI \t\t");
-                    break;
-
-            }
-
-            printf("%d\t%d\tformation num %d\n", formation[i][4], formation[i][5], i);
-
-        }
-
-    }
-
-}
-
-int formationCompatible(Population population, int idIndividu, int idInterface, int idFormation){
-
-    int jourFormation = formation[idFormation][3], hDebutFormation = formation[idFormation][4], hFinFormation = formation[idFormation][5];
-
-    for(int i = 0; i < 80; i++){
-
-        if(population[idIndividu].listeBits[idInterface * 80 + i] == 1 && formation[i][3] == jourFormation){
-
-            if((formation[i][4] >= hDebutFormation && formation[i][4] < hFinFormation) || (formation[i][5] > hDebutFormation && formation[i][5] <= hFinFormation)){
-                return 0;
-            }
-
-        }
-
-    }
-
-    return 1;
-
-}
-
-//Arevenir
-float evaluerIndividu(Population population, int idIndividu){
-
-    int evaluation, fCorr, nbPenalites;
-
-    fCorr = calculerTotalDistances(population, idIndividu) / NBR_FORMATIONS;
-
-    nbPenalites = compterPenalites(population, idIndividu);
-
-    return evaluation = 0.5 * (calculerTotalDistances(population, idIndividu) / NBR_INTERFACES + ecartTypeIndividu(population, idIndividu)) + 0.5 * fCorr * nbPenalites;
-
-}
-
-float calculerDistanceXY(int X1, int X2, int Y1, int Y2){
-
-    return sqrt(pow(X2 - X1, 2) + pow(Y2 - Y1, 2));
-
-}
-
-int calculerTotalDistances(Population population, int idIndividu){
-
-    int distanceTotale = 0;
-
-    for(int i = 0; i < NBR_INTERFACES; i++){
-        distanceTotale = distanceTotale + calculerDistanceTotaleInterface(population, idIndividu, i);
-    }
-    return distanceTotale;
-
-}
-
-int calculerDistanceTotaleInterface(Population population, int idIndividu, int idInterface){
-
-    int endroit1 = -1, endroit2 = -1;
-
-    int distanceTotale = 0;
-
-    int idCentresParHeures[14];
-
-    idCentresParHeures[0] = 0;
-    idCentresParHeures[13] = 0;
-
-    for(int i = 0; i < 7; i++){
-
-        for(int j = 1; j < 13; j++)
-            idCentresParHeures[j] = -1;
-
-        for(int j = 0; j < NBR_FORMATIONS; j++){
-
-            if(population[idIndividu].listeBits[idInterface * 80 + j] == 1 && formation[j][3] == i){
-
-                idCentresParHeures[formation[j][4] - 7] = formation[j][1] + 1;
-
-            }
-        }
-
-        endroit1 = idCentresParHeures[0];
-
-        for(int j = 1; j < 14; j++){
-
-            if(idCentresParHeures[j] != -1){
-
-                endroit2 = idCentresParHeures[j];
-
-                distanceTotale = distanceTotale + calculerDistanceXY(coord[endroit1][0], coord[endroit2][0], coord[endroit1][1], coord[endroit2][1]);
-
-                endroit1 = endroit2;
-
-            }
-
-        }
-
-    }
-
-    return distanceTotale;
-
-}
-
-int ecartTypeIndividu(Population population, int idIndividu){
-
-    int moyenne, resultat = 0;
-
-    moyenne = calculerTotalDistances(population, idIndividu) / NBR_INTERFACES;
-
-    for(int i = 0; i < NBR_INTERFACES; i++){
-
-        resultat = pow(moyenne - calculerDistanceTotaleInterface(population, idIndividu, i), 2);
-
-    }
-
-    resultat = resultat / NBR_INTERFACES;
-
-    resultat = sqrt(resultat);
-
-    return resultat;
-
-}
-
-int compterPenalites(Population population, int idIndividu){
-
-    int j, specialiteFormation, penalites = 0;
-
-    for(int i = 0; i < NBR_FORMATIONS; i++){
-
-        specialiteFormation = formation[i][1];
-        j = 0;
-
-        while(j < NBR_INTERFACES){
-
-            if(population[idIndividu].listeBits[j * 80 + i] == 1 && specialite_interfaces[population[idIndividu].idIndividu[j]][specialiteFormation] == 0){
-
-                penalites++;
-                j = NBR_INTERFACES;
-
-            }
-
-            j++;
-
-        }
-
-    }
-
-    return penalites;
-
-}
-
-void croiser2Interfaces(Population population, int idIndividu, int id1, int id2){
-
-    //afficherInterface(id1);
-    //afficherInterface(id2);
-
-    int valAlea, tempoListeBits, typeFormation, tempoHeuresInterface1, tempoHeuresInterface2, competencesId1, competencesId2;
-
-    for(int i = 0; i < 80; i++){
-
-        valAlea = rand()% 2;
-
-        typeFormation = formation[i][2];
-
-        if(population[idIndividu].listeBits[id1 * 80 + i] == population[idIndividu].listeBits[id2 * 80 + i]){
-
-            tempoHeuresInterface1 = population[idIndividu].nbHeuresSemaine[id1];
-            tempoHeuresInterface2 = population[idIndividu].nbHeuresSemaine[id2];
-
-        }else if(population[0].listeBits[id1 * 80 + i] == 1){
-
-            tempoHeuresInterface1 = population[idIndividu].nbHeuresSemaine[id1] - nombreHeureFormation(i);
-            tempoHeuresInterface2 = population[idIndividu].nbHeuresSemaine[id2] + nombreHeureFormation(i);
-
-        }else{
-
-            tempoHeuresInterface1 = population[idIndividu].nbHeuresSemaine[id1] + nombreHeureFormation(i);
-            tempoHeuresInterface2 = population[idIndividu].nbHeuresSemaine[id2] - nombreHeureFormation(i);
-
-        }
-
-        competencesId1 = competences_interfaces[population[idIndividu].idIndividu[id1]][typeFormation];
-        competencesId2 = competences_interfaces[population[idIndividu].idIndividu[id2]][typeFormation];
-
-        //if(valAlea == 1 && competencesId1 == competencesId2 && formationCompatible(id1, i) == 1 && formationCompatible(id2, i) == 1 \
-        //   && tempoHeuresInterface1 <= 35 && tempoHeuresInterface2 <= 35){
-
-        if(valAlea == 1 && competencesId1 == competencesId2 \
-           && tempoHeuresInterface1 <= 35 && tempoHeuresInterface2 <= 35){
-
-            tempoListeBits = population[idIndividu].listeBits[id1 * 80 + i];
-            population[idIndividu].listeBits[id1 * 80 + i] = population[idIndividu].listeBits[id2 * 80 + i];
-            population[idIndividu].listeBits[id2 * 80 + i] = tempoListeBits;
-
-            population[idIndividu].nbHeuresSemaine[id1] = tempoHeuresInterface1;
-            population[idIndividu].nbHeuresSemaine[id2] = tempoHeuresInterface2;
-
-        }
-
-    }
-
-    //afficherInterface(id1);
-    //afficherInterface(id2);
-
-}
-
-void initialiserPopulation(Population population){
-
-
-
-    int j, nbInterfacesUniquementLPC = 0, nbInterfacesUniquementSignes = 0, nbInterfacesSignesLPC = 0;
-    int nbInterSignesLPC_Placees = 0, nbInterSignesPlacees = 0, nbInterLPCPlacees = 0;
-    int nbHeures, edtRempli;
-
-    int compteur = 0;
-
-
-    for(int i = 0; i < NBR_INTERFACES; i++){         // comptage competences interfaces    commun à tous les individus
-
-        if(competences_interfaces[i][0] == 1 && competences_interfaces[i][1] == 1 ){    //Interface codant et LPC et Signes
-            nbInterfacesSignesLPC++;
-        }else if(competences_interfaces[i][0] == 1){
-            nbInterfacesUniquementSignes++;
-        }else{
-            nbInterfacesUniquementLPC++;
-        }
-
-    }
-
-    for(int i = 0; i < NBR_INTERFACES; i++){         //Tri dans la population des interfaces selon leurs comp�tences        commun a tous les individus
-
-        if(competences_interfaces[i][0] == 1 && competences_interfaces[i][1] == 1 ){    //Interface codant et LPC et Signes
-
-            population[0].idIndividu[nbInterSignesLPC_Placees] = i;
-            nbInterSignesLPC_Placees++;
-
-        }else if(competences_interfaces[i][0] == 1){
-
-            population[0].idIndividu[nbInterSignesPlacees + nbInterfacesSignesLPC] = i;
-            nbInterSignesPlacees++;
-
-        }else{
-
-            population[0].idIndividu[nbInterLPCPlacees + nbInterfacesSignesLPC + nbInterfacesUniquementSignes] = i;
-            nbInterLPCPlacees++;
-
-        }
-
-        population[0].nbHeuresSemaine[i] = 0;
-
-    }
-
-    for(int i = 0; i < 1920; i++){
-
-        population[0].listeBits[i] = 0;
-
-    }
-
-    for(int i = 0; i < NBR_INTERFACES; i++)
-        printf("Interface n %d -> id n %d.\tCompetences signes = %d, competences LPC = %d\n", i, population[0].idIndividu[i], competences_interfaces[population[0].idIndividu[i]][0], competences_interfaces[population[0].idIndividu[i]][1]);
-
-    for(int i = 0; i < NBR_FORMATIONS; i++){         //remplissage al�atoire des formations
-
-        int nbHeuresAvecFormation = 0, competencesIntPourFormation;
-        int formationPlacee = 0;
-        j = 0;
-
-        while(formationPlacee != 1){        //Tant que la formation n'est pas plac�e
-
-            nbHeuresAvecFormation = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
-            competencesIntPourFormation = competences_interfaces[population[0].idIndividu[j]][formation[i][2]];
-
-            if(nbHeuresAvecFormation <= NBR_HEURES_INT_INIT && competencesIntPourFormation == 1 && formationCompatible(population, 0, j, i) == 1){
-
-                population[0].listeBits[j * 80 + i] = 1;
-                population[0].nbHeuresSemaine[j] = population[0].nbHeuresSemaine[j] + nombreHeureFormation(i);
-                formationPlacee = 1;
-
-            }else{
-                j++;
-            }
-
-        }
-
-
-
-
-    }
-
-    printf("Nombre LPC : %d, nb Signes : %d, poly signes : %d \n", nbInterfacesUniquementLPC, nbInterfacesUniquementSignes, nbInterfacesSignesLPC);
-
-}
 
 int main()
 {
-
-    // Fait plutot ca : Population P1 = (Population)malloc(sizeof(Individu)*NbrIndividuPopulationBase); plutot qu'une variable global
 
     Population P1 = (Population) malloc(sizeof(Individu) * NBR_INDIVIDUS_POP);
 
     srand( time( NULL ) );
 
-    //printf("nbr heure forma n 10 = %d", nombreHeureFormation(10));
-
     initialiserPopulation(P1);
 
-    afficherIndividu(P1, 0);
+    //afficherIndividu(P1, 0);
 
-    printf("Evaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
+    //printf("Evaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
 
-    for(int i = 0; i < 11; i++)
-        croiser2Interfaces(P1, 0, 2 * i, 2 * i + 1);
+    //for(int i = 0; i < 11; i++)
+       // croiser2Interfaces(P1, 0, 2 * i, 2 * i + 1);
 
-    printf("\n");
-
-    afficherIndividu(P1, 0);
+    printf("\nouaissss");
 
     //afficherNbHeuresInterfaces(P1, 0);
 
     //afficherEDTInterface(P1, 0, 0);
 
-    printf("Nb penalites = %d\n", compterPenalites(P1, 0));
+    //croiser2Interfaces(P1, 0, 0, 18);
 
-    printf("distance totale interface %d = %d\n", 0, calculerDistanceTotaleInterface(P1, 0, 0));
+    //printf("Nb penalites = %d\n", compterPenalites(P1, 0));
 
-    printf("distance totale = %d\n", calculerTotalDistances(P1, 0));
+   // for(int i = 0; i < 11; i++)
+     //   croiser2Interfaces(P1, 1, 2 * i, 2 * i + 1);
 
-    printf("Evaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
+    afficherIndividu(P1, 0);
+    afficherIndividu(P1, 1);
+    afficherIndividu(P1, 2);
+    afficherIndividu(P1, 3);
+    afficherIndividu(P1, 4);
 
     /*for(int i = 0; i < 11; i++)
         croiser2Interfaces(P1, 0, 2 * i, 2 * i + 1);
@@ -647,6 +292,7 @@ int main()
         croiser2Interfaces(P1, 0, 2 * i, 2 * i + 1);
 
     printf("Evaluation individu 0 = %f\n", evaluerIndividu(P1, 0));*/
+
 
 }
 
