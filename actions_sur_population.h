@@ -7,4 +7,6 @@ void initialiserPopulation(Population population);
 
 void croiserIndividu(Population population, int idIndividu);
 
+void croiserPopulation(Population population)
+
 #endif // ACTIONS_SUR_POPULATION_H_INCLUDED
