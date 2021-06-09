@@ -261,21 +261,9 @@ int main()
 
     initialiserPopulation(P1);
 
-    //afficherIndividu(P1, 0);
-
-    //printf("Evaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
-
-
-
-    //afficherNbHeuresInterfaces(P1, 0);
-
-    //afficherEDTInterface(P1, 0, 0);
-
-
-    //printf("Nb penalites = %d\n", compterPenalites(P1, 0));
 
     for(int i = 0; i < 10000; i++){
-        remplacerIndividus(P1);
+        croiserPopulation(P1);
         //printf("\nEvaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
     }
 
@@ -283,14 +271,6 @@ int main()
 
     printf("Meilleure solution individu %d, evaluation = %f", idMeilleurIndividu, evaluerIndividu(P1, idMeilleurIndividu));
 
-    /*afficherIndividu(P1, 0);*/
-
-
-    //printf("\nEvaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
-    /*printf("Evaluation individu 1 = %f\n", evaluerIndividu(P1, 1));
-    printf("Evaluation individu 2 = %f\n", evaluerIndividu(P1, 2));
-    printf("Evaluation individu 3 = %f\n", evaluerIndividu(P1, 3));
-    printf("Evaluation individu 4 = %f\n", evaluerIndividu(P1, 4));*/
 
 
 }
