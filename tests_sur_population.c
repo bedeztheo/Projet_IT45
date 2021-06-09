@@ -30,3 +30,19 @@ int formationCompatible(Population population, int idIndividu, int idInterface, 
     return 1;
 
 }
+
+int trouverMeilleurIndividu(Population population){
+
+    float evalMeilleur = 100000;
+    int idMeilleur;
+
+    for(int i = 0; i < NBR_INDIVIDUS_POP; i++){
+
+        if(evaluerIndividu(population, i) < evalMeilleur)
+            idMeilleur = i;
+
+    }
+
+    return idMeilleur;
+
+}

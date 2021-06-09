@@ -8,6 +8,8 @@
 #include "data.h"
 #include "affichage.h"
 #include "fonctions_pour_evaluation.h"
+#include "tests_sur_population.h"
+#include "actions_sur_population.h"
 
 /* competences des interfaces en SIGNES et CODAGE*/
 int competences_interfaces[NBR_INTERFACES][2]={
@@ -251,6 +253,8 @@ int formation[NBR_FORMATION][6]={
 int main()
 {
 
+    int idMeilleurIndividu;
+
     Population P1 = (Population) malloc(sizeof(Individu) * NBR_INDIVIDUS_POP);
 
     srand( time( NULL ) );
@@ -270,26 +274,23 @@ int main()
 
     //printf("Nb penalites = %d\n", compterPenalites(P1, 0));
 
-    croiserPopulation(P1);
-    croiserPopulation(P1);
-    croiserPopulation(P1);
-    croiserPopulation(P1);
-    croiserPopulation(P1);
-    croiserPopulation(P1);
-    croiserPopulation(P1);
-    croiserPopulation(P1);
-    croiserPopulation(P1);
-    croiserPopulation(P1);
+    for(int i = 0; i < 10000; i++){
+        remplacerIndividus(P1);
+        //printf("\nEvaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
+    }
+
+    idMeilleurIndividu = trouverMeilleurIndividu(P1);
+
+    printf("Meilleure solution individu %d, evaluation = %f", idMeilleurIndividu, evaluerIndividu(P1, idMeilleurIndividu));
+
+    /*afficherIndividu(P1, 0);*/
 
 
-    afficherPopulation(P1);
-
-
-    printf("\nEvaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
-    printf("Evaluation individu 1 = %f\n", evaluerIndividu(P1, 1));
+    //printf("\nEvaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
+    /*printf("Evaluation individu 1 = %f\n", evaluerIndividu(P1, 1));
     printf("Evaluation individu 2 = %f\n", evaluerIndividu(P1, 2));
     printf("Evaluation individu 3 = %f\n", evaluerIndividu(P1, 3));
-    printf("Evaluation individu 4 = %f\n", evaluerIndividu(P1, 4));
+    printf("Evaluation individu 4 = %f\n", evaluerIndividu(P1, 4));*/
 
 
 }
