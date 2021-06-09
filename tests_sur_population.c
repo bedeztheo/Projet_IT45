@@ -4,6 +4,7 @@
 
 #include "data.h"
 #include "structures.h"
+#include "fonctions_pour_evaluation.h"
 
 int nombreHeureFormation(int idFormation){
 
