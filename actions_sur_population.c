@@ -5,6 +5,7 @@
 #include "data.h"
 #include "structures.h"
 #include "tests_sur_population.h"
+#include "fonctions_pour_evaluation.h"
 
 void croiser2Interfaces(Population population, int idIndividu, int id1, int id2){
 
@@ -89,10 +90,33 @@ void croiserIndividu(Population population, int idIndividu){
 
 void croiserPopulation(Population population){
 
-    for(int i = 0; i < NBR_INDIVIDUS_POP; i++)
-        croiserIndividu(population, i);
+    Population tempoPopulation = (Population) malloc(sizeof(Individu) * NBR_INDIVIDUS_POP);
+
+    float evalAvant, evalApres;
+
+    for(int i = 0; i < NBR_INDIVIDUS_POP; i++){
+
+
+
+        tempoPopulation [i] = population[i];
+
+        evalAvant = evaluerIndividu(tempoPopulation, i);
+
+        croiserIndividu(tempoPopulation, i);
+
+        evalApres = evaluerIndividu(tempoPopulation, i);
+
+        if(evalApres < evalAvant){
+            population[i] = tempoPopulation[i];
+        }
+
+    }
+
+    free(tempoPopulation);
+
 
 }
+
 
 void initialiserPopulation(Population population){
 
@@ -102,7 +126,7 @@ void initialiserPopulation(Population population){
     int nbInterSignesLPC_Placees, nbInterSignesPlacees, nbInterLPCPlacees;
 
 
-    for(int i = 0; i < NBR_INTERFACES; i++){         // comptage competences interfaces, commun à tous les individus
+    for(int i = 0; i < NBR_INTERFACES; i++){         // comptage competences interfaces, commun Ã  tous les individus
 
         if(competences_interfaces[i][0] == 1 && competences_interfaces[i][1] == 1 ){    //Interface codant et LPC et Signes
             nbInterfacesSignesLPC++;
