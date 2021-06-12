@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -27,14 +28,14 @@ void traitant_SIGINT(int num) {
 
 }
 
-int main()
+int main(int argc, char **argv)
 {
-
-    signal(SIGINT,traitant_SIGINT);
 
     clock_t debut, fin;
 
     int idMeilleurIndividu;
+
+    char generationNouvelleInstance;
 
     Population P1 = (Population) malloc(sizeof(Individu) * NBR_INDIVIDUS_POP);
 
@@ -43,6 +44,14 @@ int main()
     printf("********************************************************************************************\n\n\n\t\t\
            Bienvenue sur notre projet d'IT45\n\n\n");
 
+    printf("Voulez-vous generez un nouvel ensemble de donnee à traiter par l'algorithme ?\n");
+    printf("Tapez sur o pour OUI ou sur n'importe quel touche pour NON\n");
+    generationNouvelleInstance = (char)getchar();
+    if (generationNouvelleInstance == 'o')
+    {
+        execlp("bash","bash","remplacementData.sh",(char*) NULL);
+        exit(0);
+    }
     printf("La recherche de la meilleur solution est une boucle infinie. L'utilisateur peut appuyer sur \nCtrl + C afin d'arrêter la recherche et d'afficher la meilleur solution trouvée jusque la.");
 
     printf("\n\n********************************************************************************************\n");
@@ -55,6 +64,8 @@ int main()
     debut = clock();
 
     initialiserPopulation(P1);
+
+    signal(SIGINT,traitant_SIGINT);
 
     while(arret == 0){
 
