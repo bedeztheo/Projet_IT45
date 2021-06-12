@@ -6,12 +6,28 @@
 #include "data.h"
 #include "structures.h"
 
+
+/**
+ * @brief permet d'afficher la distance entre deux point sur le plan
+ * @param X1 coordonnée en abcisse du premier point
+ * @param X2 coordonnée en abcisse du deuxième point
+ * @param Y1 coordonnée en ordonnée du premier point
+ * @param Y2 coordonnée en ordonnée du deuxième point
+ * @return distance entre le premier et le deuxième point
+ */
 float calculerDistanceXY(int X1, int X2, int Y1, int Y2){
 
     return sqrt(pow(X2 - X1, 2) + pow(Y2 - Y1, 2));
 
 }
 
+/**
+ * @brief permet de calculer la distance total parcouru par semaine pour assurer ses cours d'une interface contenu dans un individu
+ * @param population la population dans laquelle est l'individu qui contient l'interface 
+ * @param idIndividu l'id de l'individu qui contient l'interface 
+ * @param idInterface l'id de l'interface dont on calcule la distance parcourue
+ * @return la distance total parcouru par l'interface en une semaine pour son travail
+ */
 float calculerDistanceTotaleInterface(Population population, int idIndividu, int idInterface){
 
     int endroit1 = -1, endroit2 = -1;
@@ -59,6 +75,12 @@ float calculerDistanceTotaleInterface(Population population, int idIndividu, int
 
 }
 
+/**
+ * @brief permet de calculer la distance total parcourue par semaine pour assurer ses cours de toutes les interfaces d'un individu
+ * @param population la population dans laquelle est l'individu
+ * @param idIndividu l'id de l'individu dont on calcule la distance total parcouru en une semaine par l'ensemble de ses interfaces pour le travail
+ * @return la distance total parcouru par les interfaces de l'individu en une semaine pour leur travail
+ */
 float calculerTotalDistances(Population population, int idIndividu){
 
     float distanceTotale = 0;
@@ -70,6 +92,12 @@ float calculerTotalDistances(Population population, int idIndividu){
 
 }
 
+/**
+ * @brief permet de calculer l'écart type entre les distances parcourues en une semaien pour le travail pour l'ensemble de ses interfaces.
+ * @param population la population dans laquelle est l'individu
+ * @param idIndividu l'id de l'individu dont on calcule l'écart-type des distances parcourues en une semaine par chacune de ses interfaces pour le travail
+ * @return l'écart-type des distances parcourues en une semaine par chacune des interfaces de l'individu pour le travail
+ */
 float ecartTypeIndividu(Population population, int idIndividu){
 
     float moyenne, resultat = 0;
@@ -90,6 +118,12 @@ float ecartTypeIndividu(Population population, int idIndividu){
 
 }
 
+/**
+ * @brief compte les pénalités d'un individu, càd le nombre de spécialités non satisfaites par l'emploi du temps de l'ensembles des interface
+ * @param population la population dans laquelle est l'individu
+ * @param idIndividu l'id de l'individu dont on compte le nombre de pénalité
+ * @return le nombre de pénalité de l'individu
+ */
 int compterPenalites(Population population, int idIndividu){
 
     int j, specialiteFormation, penalites = 0;
@@ -118,6 +152,12 @@ int compterPenalites(Population population, int idIndividu){
 
 }
 
+/**
+ * @brief fonction qui permet de calculer le fitness d'un individu -> à minimiser
+ * @param population la population dans laquelle est l'individu
+ * @param idIndividu l'id de l'individu dont on calcule le fitness
+ * @return le fitness de l'individu
+ */
 float evaluerIndividu(Population population, int idIndividu){
 
     float evaluation, fCorr;
