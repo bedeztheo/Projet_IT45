@@ -23,8 +23,8 @@ float calculerDistanceXY(int X1, int X2, int Y1, int Y2){
 
 /**
  * @brief permet de calculer la distance total parcouru par semaine pour assurer ses cours d'une interface contenu dans un individu
- * @param population la population dans laquelle est l'individu qui contient l'interface 
- * @param idIndividu l'id de l'individu qui contient l'interface 
+ * @param population la population dans laquelle est l'individu qui contient l'interface
+ * @param idIndividu l'id de l'individu qui contient l'interface
  * @param idInterface l'id de l'interface dont on calcule la distance parcourue
  * @return la distance total parcouru par l'interface en une semaine pour son travail
  */
@@ -135,7 +135,7 @@ int compterPenalites(Population population, int idIndividu){
 
         while(j < NBR_INTERFACES){
 
-            if(population[idIndividu].listeBits[j * 80 + i] == 1 && specialite_interfaces[population[idIndividu].idIndividu[j]][specialiteFormation] == 0){
+            if(population[idIndividu].listeBits[j * 80 + i] == 1 && specialite_interfaces[j][specialiteFormation] == 0){
 
                 penalites++;
                 j = NBR_INTERFACES;
