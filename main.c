@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     printf("********************************************************************************************\n\n\n\t\t\
            Bienvenue sur notre projet d'IT45\n\n\n");
 
-    printf("Voulez-vous generez un nouvel ensemble de donnee à traiter par l'algorithme ?\n");
+    printf("Voulez-vous generer un nouvel ensemble de donnees à traiter par l'algorithme ?\n");
     printf("Tapez sur o pour OUI ou sur n'importe quel touche pour NON\n");
     generationNouvelleInstance = (char)getchar();
     if (generationNouvelleInstance == 'o')
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
         execlp("bash","bash","remplacementData.sh",(char*) NULL);
         exit(0);
     }
-    printf("La recherche de la meilleur solution est une boucle infinie. L'utilisateur peut appuyer sur \nCtrl + C afin d'arrêter la recherche et d'afficher la meilleur solution trouvée jusque la.");
+    printf("La recherche de la meilleure solution est une boucle infinie. L'utilisateur peut appuyer sur \nCtrl + C afin d'arrêter la recherche et d'afficher la meilleure solution trouvée jusque la.");
 
     printf("\n\n********************************************************************************************\n");
 
