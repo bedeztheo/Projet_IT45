@@ -5,6 +5,15 @@
 #include "data.h"
 #include "structures.h"
 
+
+/**
+ * @brief fonction permettant d'afficher le programme bit par bit d'une interface d'un individu donné.
+ * @param population la population dans laquelle est l'individu qui contient l'interface que l'on souhaite afficher
+ * @param idIndividu l'id de l'individu dans lequel est contenue l'interface à afficher
+ * @param idInterface l'id de l'interface à afficher
+ * @return none
+ */
+
 void afficherInterface(Population population, int idIndividu, int idInterface){
 
     printf("Interface %d: \t", idInterface);
@@ -16,6 +25,13 @@ void afficherInterface(Population population, int idIndividu, int idInterface){
 
 }
 
+/**
+ * @brief fonction permettant d'afficher le programme bit par bit le programme de toutes les interfaces dans un individu donné
+ * @param population la population dans laquelle est l'individu à afficher
+ * @param idIndividu l'id de l'individu à afficher
+ * @return none
+ */
+
 void afficherIndividu(Population population, int idIndividu){
 
     printf("Individu ou solution n %d\n", idIndividu);
@@ -25,6 +41,11 @@ void afficherIndividu(Population population, int idIndividu){
 
 }
 
+/**
+ * @brief fonction permettant d'afficher le programme bit par bit de tous les individus (ensemble de toutes les interfaces) d'une population
+ * @param population la population à afficher
+ * @return none
+ */
 void afficherPopulation(Population population){
 
     for(int i = 0; i < NBR_INDIVIDUS_POP; i++)
@@ -32,6 +53,12 @@ void afficherPopulation(Population population){
 
 }
 
+/**
+ * @brief fonction permettant d'afficher le nombre d'heure de travail par semaine de toutes les interfaces d'un individu
+ * @param population la population dans laquelle est l'individu à afficher
+ * @param idIndividu l'id de l'individu à afficher
+ * @return none
+ */
 void afficherNbHeuresInterfaces(Population population, int idIndividu){
 
     for(int i = 0; i < 24; i++)
@@ -39,6 +66,13 @@ void afficherNbHeuresInterfaces(Population population, int idIndividu){
 
 }
 
+/**
+ * @brief fonction permettant d'afficher l'emploi du temps d'une interface contenue dans un individu d'une population
+ * @param population la population dans laquelle est l'individu qui contient l'interface à afficher
+ * @param idIndividu l'id de l'individu  qui contient l'interface à afficher
+ * @param idInterface l'id de l'interface à afficher
+ * @return none
+ */
 void afficherEDTInterface(Population population, int idIndividu, int idInterface){
 
     printf("Emploi du temps de l'interface %d\n", idInterface);
