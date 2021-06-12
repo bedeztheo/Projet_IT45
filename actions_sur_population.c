@@ -47,8 +47,8 @@ void croiser2Interfaces(Population population, int idIndividu, int id1, int id2)
 
         }
 
-        competencesId1 = competences_interfaces[population[idIndividu].idIndividu[id1]][typeFormation];
-        competencesId2 = competences_interfaces[population[idIndividu].idIndividu[id2]][typeFormation];
+        competencesId1 = competences_interfaces[id1][typeFormation];
+        competencesId2 = competences_interfaces[id2][typeFormation];
 
 
         if(valAlea == 1 && competencesId1 == competencesId2 && croisementCompatible == 1\
@@ -149,62 +149,6 @@ void croiserPopulation(Population population){
 void initialiserPopulation(Population population){
 
 
-
-    int nbInterfacesUniquementLPC = 0, nbInterfacesUniquementSignes = 0, nbInterfacesSignesLPC = 0;
-    int nbInterSignesLPC_Placees, nbInterSignesPlacees, nbInterLPCPlacees;
-
-
-    for(int i = 0; i < NBR_INTERFACES; i++){         // comptage competences interfaces, commun à tous les individus
-
-        if(competences_interfaces[i][0] == 1 && competences_interfaces[i][1] == 1 ){    //Interface codant et LPC et Signes
-            nbInterfacesSignesLPC++;
-        }else if(competences_interfaces[i][0] == 1){
-            nbInterfacesUniquementSignes++;
-        }else{
-            nbInterfacesUniquementLPC++;
-        }
-
-    }
-
-    for(int i = 0; i < NBR_INDIVIDUS_POP; i++){
-
-        nbInterSignesLPC_Placees = 0;
-        nbInterSignesPlacees = 0;
-        nbInterLPCPlacees = 0;
-
-        for(int j = 0; j < NBR_INTERFACES; j++){         //Tri dans la population des interfaces selon leurs competences, commun a tous les individus
-
-            if(competences_interfaces[j][0] == 1 && competences_interfaces[j][1] == 1 ){    //Interface codant et LPC et Signes
-
-                population[i].idIndividu[nbInterSignesLPC_Placees] = j;
-                nbInterSignesLPC_Placees++;
-
-            }else if(competences_interfaces[j][0] == 1){
-
-                population[i].idIndividu[nbInterSignesPlacees + nbInterfacesSignesLPC] = j;
-                nbInterSignesPlacees++;
-
-            }else{
-
-                population[i].idIndividu[nbInterLPCPlacees + nbInterfacesSignesLPC + nbInterfacesUniquementSignes] = j;
-                nbInterLPCPlacees++;
-
-            }
-
-            population[i].nbHeuresSemaine[j] = 0;
-
-        }
-
-    }
-
-    /*for(int i = 0; i < NBR_INDIVIDUS_POP; i++){
-
-        for(int j = 0; j < NBR_INTERFACES; j++){
-            printf("Interface n %d -> id n %d.\tCompetences signes = %d, competences LPC = %d\n", j, population[i].idIndividu[j], competences_interfaces[population[i].idIndividu[j]][0], competences_interfaces[population[i].idIndividu[j]][1]);
-        }
-        printf("\n");
-    }*/
-
     for(int i = 0; i < NBR_INDIVIDUS_POP; i++){
 
         for(int j = 0; j < (NBR_FORMATIONS * NBR_INTERFACES); j++){
@@ -225,7 +169,7 @@ void initialiserPopulation(Population population){
             while(formationPlacee != 1){        //Tant que la formation n'est pas placee
 
                 nbHeuresAvecFormation = population[i].nbHeuresSemaine[idInt] + nombreHeureFormation(j);
-                competencesIntPourFormation = competences_interfaces[population[i].idIndividu[idInt]][formation[j][2]];
+                competencesIntPourFormation = competences_interfaces[idInt][formation[j][2]];
 
                 if(nbHeuresAvecFormation <= NBR_HEURES_INT_INIT && competencesIntPourFormation == 1 && formationCompatible(population, i, idInt, j) == 1){
 
@@ -243,7 +187,5 @@ void initialiserPopulation(Population population){
         }
 
     }
-
-    printf("Nombre LPC : %d, nb Signes : %d, poly signes : %d \n", nbInterfacesUniquementLPC, nbInterfacesUniquementSignes, nbInterfacesSignesLPC);
 
 }
