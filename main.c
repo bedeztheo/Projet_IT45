@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <signal.h>
 #include <time.h>
 #include <math.h>
 
@@ -11,8 +12,27 @@
 #include "tests_sur_population.h"
 #include "actions_sur_population.h"
 
+int arret = 0;
+
+void traitant_SIGINT(int num) {
+
+    if (num != SIGINT){
+
+    }else{
+
+        arret = 1;
+        printf("\nFin de la recherche ordonnée par l'utilisateur\n");
+
+	}
+
+}
+
 int main()
 {
+
+    signal(SIGINT,traitant_SIGINT);
+
+    clock_t debut, fin;
 
     int idMeilleurIndividu;
 
@@ -20,21 +40,37 @@ int main()
 
     srand( time( NULL ) );
 
+    printf("********************************************************************************************\n\n\n\t\t\
+           Bienvenue sur notre projet d'IT45\n\n\n");
+
+    printf("La recherche de la meilleur solution est une boucle infinie. L'utilisateur peut appuyer sur \nCtrl + C afin d'arrêter la recherche et d'afficher la meilleur solution trouvée jusque la.");
+
+    printf("\n\n********************************************************************************************\n");
+
+    printf("\n\n\t\tAppuyez sur la touche entree pour lancer le programme");
+
+
+    getchar();
+
+    debut = clock();
+
     initialiserPopulation(P1);
 
+    while(arret == 0){
 
-    for(int i = 0; i < 10000; i++){
         croiserPopulation(P1);
-        //printf("\nEvaluation individu 0 = %f\n", evaluerIndividu(P1, 0));
+
     }
+
+    fin = clock();
 
     idMeilleurIndividu = trouverMeilleurIndividu(P1);
 
-    printf("Meilleure solution individu %d, evaluation = %f", idMeilleurIndividu, evaluerIndividu(P1, idMeilleurIndividu));
+    printf("\nMeilleure solution individu %d, evaluation = %f\n\n", idMeilleurIndividu, evaluerIndividu(P1, idMeilleurIndividu));
 
+    printf("Temps d'execution = %.1f sec.\n", (float) ((fin - debut) * 1e-6));
 
 
 }
-
 
 
