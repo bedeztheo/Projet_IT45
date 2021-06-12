@@ -7,6 +7,15 @@
 #include "tests_sur_population.h"
 #include "fonctions_pour_evaluation.h"
 
+
+/**
+ * @brief fonction permettant de croiser deux interfaces au sein d'un individu bits par bits avec une probabilité 1/2
+ * @param population la population dans lequel est identifié l'individu
+ * @param idIndividu l'id de l'individu pour le retrouver au sein de la population
+ * @param id1 id de l'interface 1 à croiser pour la retrouver au sein de l'individu
+ * @return none modification direct en mémoire avec les pointeurs
+ */
+
 void croiser2Interfaces(Population population, int idIndividu, int id1, int id2){
 
     int valAlea, tempoListeBits, typeFormation, croisementCompatible, tempoHeuresInterface1, tempoHeuresInterface2, competencesId1, competencesId2;
@@ -58,6 +67,14 @@ void croiser2Interfaces(Population population, int idIndividu, int id1, int id2)
 
 }
 
+/**
+ * @brief fonction permettant de croiser toutes les interfaces d'un individu
+ * @param population la population dans lequel est identifié l'individu
+ * @param idIndividu l'id de l'individu pour le retrouver au sein de la population
+ * @return none modification direct en mémoire avec les pointeurs
+ */
+
+
 void croiserIndividu(Population population, int idIndividu){
 
     int tableauCroisement[NBR_INTERFACES], valAlea, idInt1, idInt2;
@@ -88,6 +105,12 @@ void croiserIndividu(Population population, int idIndividu){
 
 }
 
+/**
+ * @brief fonction permettant de croiser toutes les interfaces de tous les individus d'une population, si le fitness de l'individu i après croisement ne diminue pas alors on prend l'individu i avant croisement
+ * @param population la population à traiter
+ * @return none modification direct en mémoire avec les pointeurs
+ */
+
 void croiserPopulation(Population population){
 
     Population tempoPopulation = (Population) malloc(sizeof(Individu) * NBR_INDIVIDUS_POP);
@@ -117,6 +140,11 @@ void croiserPopulation(Population population){
 
 }
 
+/**
+ * @brief fonction permettant d'initialiser une population sur le principe de :  premier arrivé, premier servis.
+ * @param population la population à initialiser
+ * @return none modification direct en mémoire avec les pointeurs
+ */
 
 void initialiserPopulation(Population population){
 
