@@ -5,7 +5,7 @@
 
 typedef struct {
 
-    int8_t listeBits[NBR_APPRENANTS * NBR_INTERFACES];
+    int8_t listeBits[NBR_FORMATIONS * NBR_INTERFACES];
     int nbHeuresSemaine[NBR_INTERFACES];
 
 } Individu;
