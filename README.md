@@ -1,6 +1,6 @@
-README.md
+README.md<br><br>
 
-Projet_IT45 : algorithme génétique
+Projet_IT45 : algorithme génétique<br><br>
 
 AU PREALABLE:<br><br>
 
@@ -17,11 +17,11 @@ _Posséder l'interpréteur bash dans /bin/bash dans votre système de fichier<br
 
 RÉCUPÉRER LE PROJET:<br><br>
 
-_Vous pouvez récupérer le projet en local en le téléchargent depuis github ou en éxécutant git pull après avoir lié votre dépot local à ce dépot distant<br>
+_Vous pouvez récupérer le projet en local en le téléchargent depuis github ou en éxécutant git pull après avoir lié votre dépot local à ce dépot distant<br><br>
 
 COMPILER LE PROJET:<br><br>
 
-_Placez-vous dans le dossier qui contient le projet sur un terminal et tapez: ./build.sh<br>
+_Placez-vous dans le dossier qui contient le projet sur un terminal et tapez: ./build.sh<br><br>
 
 EXECUTER LE PROGRAMME:<br><br>
 
