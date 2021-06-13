@@ -5,15 +5,15 @@ Projet_IT45 : algorithme génétique<br><br>
 AU PRÉALABLE:<br><br>
 
 _Le projet marche uniquement sur les environnements de type UNIX.<br>
-_Avoir installer java sur votre machine et que le chemin de l'éxécutif java se trouvent dans votre variable d'environnement PATH.<br>
+_Avoir installé java sur votre machine et que le chemin de l'éxécutif java se trouve dans votre variable d'environnement PATH.<br>
 Vous pouvez réaliser cette opération en tapant dans votre terminal :<br>
 sudo apt update<br>
 sudo apt install default-jdk<br>
-_Avoir installer le compilateur C gcc sur votre machine et que le chemin de l'éxécutif gcc se trouvent dans votre variable d'environnement PATH.<br>
+_Avoir installé le compilateur C gcc sur votre machine et que le chemin de l'éxécutif gcc se trouve dans votre variable d'environnement PATH.<br>
 Vous pouvez réaliser cette opération en tapant dans votre terminal :<br>
 sudo apt update<br>
 sudo apt install gcc<br>
-_Posséder l'interpréteur bash dans /bin/bash dans votre système de fichier<br><br>
+_Posséder l'interpréteur bash dans /bin/bash dans votre système de fichiers<br><br>
 
 RÉCUPÉRER LE PROJET:<br><br>
 
@@ -25,4 +25,4 @@ _Placez-vous dans le dossier qui contient le projet sur un terminal et tapez: ./
 
 ÉXÉCUTER LE PROGRAMME:<br><br>
 
-_Éxécuter alors le programme en tapant ./run.sh ou ./affectationEmployes.exe!!!
+_Éxécutez alors le programme en tapant ./run.sh ou ./affectationEmployes.exe!!!
