@@ -25,4 +25,4 @@ _Placez-vous dans le dossier qui contient le projet sur un terminal et tapez: ./
 
 ÉXÉCUTER LE PROGRAMME:<br><br>
 
-_Executer alors le programme en tapant ./run.sh ou affectationEmployes.exe!!!
+_Éxécuter alors le programme en tapant ./run.sh ou affectationEmployes.exe!!!
