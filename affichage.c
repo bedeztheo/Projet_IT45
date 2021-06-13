@@ -75,37 +75,85 @@ void afficherNbHeuresInterfaces(Population population, int idIndividu){
  */
 void afficherEDTInterface(Population population, int idIndividu, int idInterface){
 
-    printf("Emploi du temps de l'interface %d\n", idInterface);
+    int idFormations[15], index = 0, temp;
+
+    for(int i = 0; i < 15; i++){
+
+        idFormations[i] = -1;
+
+    }
 
     for(int i = 0; i < 80; i++){
 
         if(population[idIndividu].listeBits[idInterface * 80 + i] == 1){
 
-            switch(formation[i][3]){
+            idFormations[index] = i;
+            index++;
 
-                case 1 : printf("LUNDI \t\t");
-                    break;
+        }
 
-                case 2 : printf("MARDI \t\t");
-                    break;
+    }
 
-                case 3 : printf("MERCREDI \t");
-                    break;
 
-                case 4 : printf("JEUDI \t\t");
-                    break;
+    for(int i = 0; i < index - 1; i++){
 
-                case 5 : printf("VENDREDI \t");
-                    break;
+        for(int j = i + 1; j < index; j++){
 
-                case 6 : printf("SAMEDI \t\t");
-                    break;
+            if(formation[idFormations[i]][3] > formation[idFormations[j]][3]){
+
+                temp = idFormations[i];
+                idFormations[i] = idFormations[j];
+                idFormations[j] = temp;
 
             }
 
-            printf("%d\t%d\tformation num %d\n", formation[i][4], formation[i][5], i);
+        }
+
+    }
+
+    for(int i = 0; i < index - 1; i++){
+
+        for(int j = i + 1; j < index; j++){
+
+            if(formation[idFormations[i]][3] == formation[idFormations[j]][3] && formation[idFormations[i]][4] > formation[idFormations[j]][4]){
+
+                temp = idFormations[i];
+                idFormations[i] = idFormations[j];
+                idFormations[j] = temp;
+
+            }
 
         }
+
+    }
+
+    printf("Emploi du temps de l'interface %d\n", idInterface);
+
+    for(int i = 0; i < index; i++){
+
+        switch(formation[idFormations[i]][3]){
+
+            case 1 : printf("LUNDI \t\t");
+                break;
+
+            case 2 : printf("MARDI \t\t");
+                break;
+
+            case 3 : printf("MERCREDI \t");
+                break;
+
+            case 4 : printf("JEUDI \t\t");
+                break;
+
+            case 5 : printf("VENDREDI \t");
+                break;
+
+            case 6 : printf("SAMEDI \t\t");
+                break;
+
+        }
+
+        printf("%dh \t->\t%dh\tformation num %d\n", formation[idFormations[i]][4], formation[idFormations[i]][5], idFormations[i]);
 
     }
 
