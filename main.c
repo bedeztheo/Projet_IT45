@@ -22,7 +22,7 @@ void traitant_SIGINT(int num) {
     }else{
 
         arret = 1;
-        printf("\nFin de la recherche ordonnée par l'utilisateur\n");
+        printf("\n\n\nFin de la recherche ordonnée par l'utilisateur\n\n");
 
 	}
 
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 
     clock_t debut, fin;
 
-    int idMeilleurIndividu;
+    int idMeilleurIndividu, nbGen = 0;
 
     char generationNouvelleInstance;
 
@@ -56,10 +56,6 @@ int main(int argc, char **argv)
 
     printf("\n\n********************************************************************************************\n");
 
-    printf("\n\n\t\tAppuyez sur la touche entree pour lancer le programme");
-
-
-    getchar();
 
     debut = clock();
 
@@ -67,9 +63,15 @@ int main(int argc, char **argv)
 
     signal(SIGINT,traitant_SIGINT);
 
+    printf("\nEvaluation = %.2f.  Nb generation = %d", evaluerIndividu(P1, trouverMeilleurIndividu(P1)), nbGen);
+
     while(arret == 0){
 
         croiserPopulation(P1);
+        nbGen++;
+
+        if(nbGen % 1000 == 0)
+            printf("\nEvaluation = %.2f.  Nb generation = %d", evaluerIndividu(P1, trouverMeilleurIndividu(P1)), nbGen);
 
     }
 
@@ -77,11 +79,22 @@ int main(int argc, char **argv)
 
     idMeilleurIndividu = trouverMeilleurIndividu(P1);
 
-    printf("\nMeilleure solution individu %d, evaluation = %f\n\n", idMeilleurIndividu, evaluerIndividu(P1, idMeilleurIndividu));
+    for(int i = 0; i < NBR_INTERFACES; i++){
+
+        afficherEDTInterface(P1, idMeilleurIndividu, i);
+        printf("\n");
+
+    }
+
+    printf("\n\nVous pouvez scroller vers le haut pour consulter les emplois du temps de chaque interface\n");
+
+    printf("\nNb gen = %d", nbGen);
+
+    printf("\n\nMeilleure solution individu %d, evaluation = %f\n\n", idMeilleurIndividu, evaluerIndividu(P1, idMeilleurIndividu));
 
     printf("Temps d'execution = %.1f sec.\n", (float) ((fin - debut) * 1e-6));
 
+    printf("\nnb penalites = %d\n\n", compterPenalites(P1, idMeilleurIndividu));
+
 
 }
-
-
