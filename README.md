@@ -2,7 +2,7 @@ README.md<br><br>
 
 Projet_IT45 : algorithme génétique<br><br>
 
-AU PREALABLE:<br><br>
+AU PRÉALABLE:<br><br>
 
 _Le projet marche uniquement sur les environnements de type UNIX.<br>
 _Avoir installer java sur votre machine et que le chemin de l'éxécutif java se trouvent dans votre variable d'environnement PATH.<br>
@@ -23,6 +23,6 @@ COMPILER LE PROJET:<br><br>
 
 _Placez-vous dans le dossier qui contient le projet sur un terminal et tapez: ./build.sh<br><br>
 
-EXECUTER LE PROGRAMME:<br><br>
+ÉXÉCUTER LE PROGRAMME:<br><br>
 
 _Executer alors le programme en tapant ./run.sh ou affectationEmployes.exe!!!
