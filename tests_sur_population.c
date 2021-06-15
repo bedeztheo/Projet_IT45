@@ -27,13 +27,19 @@ int nombreHeureFormation(int idFormation){
  */
 int formationCompatible(Population population, int idIndividu, int idInterface, int idFormation){
 
-    int jourFormation = formation[idFormation][3], hDebutFormation = formation[idFormation][4], hFinFormation = formation[idFormation][5];
+    int jourFormation = formation[idFormation][3], hDebutFormation = formation[idFormation][4], hFinFormation = formation[idFormation][5],
+        nbHeuresJour = (formation[idFormation][5] - formation[idFormation][4]);
 
     for(int i = 0; i < 80; i++){
 
+        if(formation[idFormation][3] == formation[i][3]){
+            nbHeuresJour += formation[i][5] - formation[i][4];
+        }
+
         if(population[idIndividu].listeBits[idInterface * 80 + i] == 1 && formation[i][3] == jourFormation){
 
-            if((formation[i][4] >= hDebutFormation && formation[i][4] < hFinFormation) || (formation[i][5] > hDebutFormation && formation[i][5] <= hFinFormation)){
+            if((formation[i][4] >= hDebutFormation && formation[i][4] < hFinFormation) || (formation[i][5] > hDebutFormation && formation[i][5] <= hFinFormation)
+               || (formation[i][4] < hDebutFormation && formation[i][5] > hFinFormation) || nbHeuresJour > 8){
                 return 0;
             }
 
